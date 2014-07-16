@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contextMenu_list_footer"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="left"
+    android:paddingTop="12dip"
+    android:paddingBottom="10dip"
+    android:paddingLeft="12dip"
+    android:textColor="#F17374"
+    android:textSize="12dip"
+    android:lineSpacingExtra="6dip"
+    android:clickable="true"/>

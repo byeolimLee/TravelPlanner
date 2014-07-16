@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contextMenu_main"
+    android:layout_width="@dimen/default_popup_width"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/popup_bg_listonly"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/contextMenu_titleLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/default_popup_height"
+        android:layout_gravity="center"
+        android:background="@color/transparent" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="left|center_vertical"
+            android:gravity="left|center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="21dip" >
+
+            <TextView
+                android:id="@+id/contextMenu_title"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="left|center_vertical"
+                android:lines="1"
+                android:singleLine="true"
+                android:textColor="@color/popup_list_title_color"
+                android:textSize="16.5dip"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_gravity="bottom"
+            android:background="@color/popup_list_title_linecolor" />
+    </FrameLayout>
+
+    <ListView
+        android:id="@+id/contextMenu_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/transparent"
+        android:cacheColorHint="@color/transparent"
+        android:divider="@color/popup_list_item_linecolor"
+        android:dividerHeight="1px"
+        android:fadeScrollbars="true"
+        android:fadingEdge="none"
+        android:listSelector="@drawable/popup_bg_basic_list_selector" />
+</LinearLayout>

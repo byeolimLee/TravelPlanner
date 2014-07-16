@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Common Colors -->
+    <color name="transparent">#00000000</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="yellow">#FFFDEB82</color>
+    <color name="light_gray">#FFA3A4A7</color>
+    <color name="more_light_gray">#FFB5B6B9</color>
+    <color name="gray">#FF737C8D</color>
+    <color name="dark_gray">#FF333333</color>
+    <color name="light_red">#FFFC5C5C</color>
+    <color name="light_blue">#FF2586FF</color>
+    <color name="sea_blue">#FF5C849A</color>
+    <color name="dimed_gray">#FFC4C4C4</color>
+    <color name="black_transparent">#CC000000</color>
+    <color name="light_black_tarnsparent">#99000000</color>
+    <color name="red">#FFCC6666</color>
+
+    <color name="text_bgcolor_gray">#FFF6F6F6</color>
+    <color name="popup_list_title_color">#FFE25454</color>
+    <color name="popup_list_title_linecolor">#FFE25454</color>
+    <color name="popup_list_item_color">#FF000000</color>
+    <color name="popup_list_item_linecolor">#FFD7D7D7</color>
+    <color name="popup_list_item_pressed_bgcolor">#FFE25454</color>
+</resources>

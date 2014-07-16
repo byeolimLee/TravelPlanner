@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string-array name="travel_item_menu_list">
+    <item>edit</item>
+    <item>delete</item>
+</string-array>
+
+    <string-array name="travel_item_list">
+        <item>transport</item>
+        <item>accommodation</item>
+        <item>restaurant</item>
+        <item>popular spot</item>
+        <item>shopping places</item>
+    </string-array>
+</resources>
