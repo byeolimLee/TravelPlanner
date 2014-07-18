@@ -1,12 +1,13 @@
 package com.starim.android.apps.travelplanner.model;
 
+import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by starim on 14. 7. 2..
@@ -27,7 +28,12 @@ public class TravelList {
     private String date;
 
     @ForeignCollectionField
-    private ForeignCollection<TravelItem> items;
+    private ForeignCollection<TravelItemTransport> transports;
+
+    @ForeignCollectionField
+    private ForeignCollection<TravelItemAccommodation> accommodations;
+
+    private ArrayList<TravelItem> items;
 
     public void setId(int id) {this.id = id;}
 
@@ -44,7 +50,7 @@ public class TravelList {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -59,13 +65,40 @@ public class TravelList {
         this.date = date;
     }
 
-    public List<TravelItem> getItems() {
-        ArrayList<TravelItem> itemList = new ArrayList<TravelItem>();
-//        if (items != null) {
-//            for (TravelItem item : items) {
-//                itemList.add(item);
-//            }
-//        }
-        return itemList;
+    public ForeignCollection<TravelItemTransport> getTransports() {
+        return this.transports;
+    }
+
+    public ForeignCollection<TravelItemAccommodation> getAccommodations() {
+        return this.accommodations;
+    }
+
+    private int addTravelItemListFromForeignCollection(ForeignCollection<? extends TravelItem> collection, ArrayList<TravelItem> arrayList) {
+        CloseableIterator<? extends TravelItem> iterator = null;
+        try {
+            iterator = collection.closeableIterator();
+            while (iterator.hasNext()) {
+                TravelItem travelItem = iterator.next();
+                arrayList.add(travelItem);
+            }
+        } finally {
+            try {
+                iterator.close();
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+                return -1;
+            }
+        }
+
+        return 0;
+    }
+
+    public ArrayList<TravelItem> getAllTravelItems() {
+        ArrayList<TravelItem> travelItemList = new ArrayList<TravelItem>();
+
+        addTravelItemListFromForeignCollection(getTransports(), travelItemList);
+        addTravelItemListFromForeignCollection(getAccommodations(), travelItemList);
+
+        return travelItemList;
     }
 }

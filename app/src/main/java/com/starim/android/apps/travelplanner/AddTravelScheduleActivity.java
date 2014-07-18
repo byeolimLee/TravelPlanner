@@ -239,7 +239,7 @@ public class AddTravelScheduleActivity extends FragmentActivity {
             case R.id.menu_add:
                 switch(mTravelItemType) {
                     case TravelItemCategory.TYPE_ID_TRANSPORT:
-                        DatabaseManager.getInstance().newTravelItemTransport(mTravelListId, "test",
+                        DatabaseManager.getInstance().newTravelItemTransport(mTravelListId, "aaaaaa",
                                                     String.valueOf(mStartDate.getTimeInMillis()), String.valueOf(mEndDate.getTimeInMillis()),
                                                     "OZ551", "flight", "Seoul", "Istanbul");
                         break;

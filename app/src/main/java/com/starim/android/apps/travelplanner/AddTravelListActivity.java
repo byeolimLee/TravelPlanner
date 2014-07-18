@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.starim.android.apps.travelplanner.db.DatabaseHelper;
 import com.starim.android.apps.travelplanner.db.DatabaseManager;
 import com.starim.android.apps.travelplanner.model.TravelList;
 
@@ -16,13 +17,13 @@ import butterknife.OnClick;
 
 public class AddTravelListActivity extends Activity {
     @InjectView(R.id.title_edit)
-    EditText titleEdit;
+    EditText mTitleEdit;
     @InjectView(R.id.desc_edit)
-    EditText descEdit;
+    EditText mDescEdit;
     @InjectView(R.id.date_edit)
-    EditText dateEdit;
+    EditText mDateEdit;
 
-    private TravelList travelList;
+    private TravelList mTravelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,21 +39,21 @@ public class AddTravelListActivity extends Activity {
         Bundle bundle = getIntent().getExtras();
         if (null!=bundle && bundle.containsKey(Constants.keyTravelListId)) {
             int travelListId = bundle.getInt(Constants.keyTravelListId);
-            travelList = DatabaseManager.getInstance().getTravelistWithId(travelListId);
-            titleEdit.setText(travelList.getTitle());
+            mTravelList = DatabaseManager.getInstance().getTravelistWithId(travelListId);
+            mTitleEdit.setText(mTravelList.getTitle());
         }
     }
 
     @OnClick(R.id.button_save)
     public void setupButton(Button button) {
-        String title = titleEdit.getText().toString();
-        String desc = descEdit.getText().toString();
-        String date = dateEdit.getText().toString();
+        String title = mTitleEdit.getText().toString();
+        String desc = mDescEdit.getText().toString();
+        String date = mDateEdit.getText().toString();
 
         final Activity activity = this;
 
         if (null != title && title.length() > 0) {
-            if (null != travelList) {
+            if (null != mTravelList) {
                 updateTravelList(title, desc, date);
             } else {
                 createTravelList(title, desc, date);
@@ -72,14 +73,14 @@ public class AddTravelListActivity extends Activity {
     }
 
     private void updateTravelList(String title, String desc, String date) {
-        if (null!=travelList) {
+        if (null!=mTravelList) {
             if (!title.isEmpty())
-                travelList.setTitle(title);
+                mTravelList.setTitle(title);
             if (!desc.isEmpty())
-                travelList.setDescription(desc);
+                mTravelList.setDescription(desc);
             if (!date.isEmpty())
-                travelList.setDate(date);
-            DatabaseManager.getInstance().updateTravelList(travelList);
+                mTravelList.setDate(date);
+            DatabaseManager.getInstance().updateTravelList(mTravelList);
         }
     }
 

@@ -10,6 +10,7 @@ import com.starim.android.apps.travelplanner.TravelItemCategory;
 
 @DatabaseTable
 public class TravelItemAccommodation extends TravelItem {
+
     @DatabaseField
     private String name;
 
@@ -77,9 +78,7 @@ public class TravelItemAccommodation extends TravelItem {
     public TravelItemAccommodation() {}
 
     @Override
-    public void setList(TravelList list) {
-        this.list = list;
-    }
+    public void setList(TravelList travelList) {this.list = travelList; }
 
     @Override
     public void setType(String type) {
@@ -94,4 +93,20 @@ public class TravelItemAccommodation extends TravelItem {
 
     @Override
     public void setEndDate(String endDate) { this.endDate = endDate; }
+
+    @Override
+    public int hashCode() {
+        String buffer = super.hashCode() + this.name;
+        return buffer.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (super.equals(other) == false)
+            return false;
+
+        if (name.equals(((TravelItemAccommodation) other).name) == false)
+            return false;
+        return true;
+    }
 }

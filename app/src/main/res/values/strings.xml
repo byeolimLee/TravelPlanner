@@ -17,6 +17,7 @@
 
     <string name="title_travel_category_select">Travel Category Select</string>
 
+    <string name="travel_schedule_group_date_pattern">yyyy.MM</string>
     <string name="travel_item_date_format">%2$s. %3$s. %1$s</string>
     <string name="travel_item_time_format">%2$s:%2$s</string>
 </resources>

@@ -4,9 +4,7 @@ import android.content.Context;
 
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.stmt.SelectArg;
 import com.starim.android.apps.travelplanner.TravelItemCategory;
-import com.starim.android.apps.travelplanner.model.TravelItem;
 import com.starim.android.apps.travelplanner.model.TravelItemAccommodation;
 import com.starim.android.apps.travelplanner.model.TravelItemTransport;
 import com.starim.android.apps.travelplanner.model.TravelList;
@@ -57,10 +55,10 @@ public class DatabaseManager {
         }
     }
 
-    public TravelList getTravelistWithId(int TravelListId) {
+    public TravelList getTravelistWithId(int travelListId) {
         TravelList travelList = null;
         try {
-            travelList = getHelper().getTravelListDao().queryForId(TravelListId);
+            travelList = getHelper().getTravelListDao().queryForId(travelListId);
         } catch (SQLException e) {
             e.printStackTrace();
         }

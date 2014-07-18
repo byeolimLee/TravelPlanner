@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.starim.android.apps.travelplanner.common.DateTimeUtils;
 import com.starim.android.apps.travelplanner.db.DatabaseManager;
 import com.starim.android.apps.travelplanner.model.TravelItem;
+import com.starim.android.apps.travelplanner.model.TravelItemTransport;
 import com.starim.android.apps.travelplanner.model.TravelList;
 
 import java.util.ArrayList;
@@ -90,27 +91,42 @@ public class TravelScheduleActivity extends Activity {
         super.onStart();
         int travelListId = getIntent().getExtras().getInt(Constants.keyTravelListId);
         mTravelList = DatabaseManager.getInstance().getTravelistWithId(travelListId);
-        Log.i("travelList", "travelList=" + mTravelList + " travelListId=" + travelListId);
         setTitle("Travel list '"+ mTravelList.getTitle()+"'");
         setupTravelScheduleListView();
     }
 
     private void setupTravelScheduleListView() {
         if (null != mTravelList) {
-            final List<TravelItem> travelItemList = mTravelList.getItems();
+            List<TravelItem> travelItemList = mTravelList.getAllTravelItems();
             mGroupList = new ArrayList<String>();
             mChildList = new ArrayList<ArrayList<TravelItem>>();
             ArrayList<TravelItem> childListContent = null;
 
+            TravelItem lastTravelItem = travelItemList.get(travelItemList.size() - 1);
+
             for (TravelItem travelItem : travelItemList) {
-                String month = DateTimeUtils.convertFormattedTimeFromSystemTime("YYYY.MM", Long.parseLong(travelItem.getStartDate()));
+                String pattern = getApplicationContext().getResources().getString(R.string.travel_schedule_group_date_pattern);
+                String month = DateTimeUtils.convertFormattedTimeFromSystemTime(pattern, Long.parseLong(travelItem.getStartDate()));
+//                Log.i("TravelSchedule:: ", "type:" + travelItem.getType() + " title:" +  travelItem.getTitle() + " startDate:" + travelItem.getStartDate() + " endDate:" + travelItem.getEndDate());
+//                if (travelItem instanceof TravelItemTransport) {
+//                    TravelItemTransport transportItem = (TravelItemTransport)travelItem;
+//                    Log.i("TravelSchedule:: ", "name:" + transportItem.getName() + " vehicle:" + transportItem.getVehicle() +
+//                            " depCity:" + transportItem.getDepartureCity() + " arrCity:" + transportItem.getArrivalCity() + " duration:" + transportItem.getDuration());
+//                }
+
                 if (!mGroupList.contains(month)) {
                     mGroupList.add(month);
-                    if (childListContent != null && !childListContent.isEmpty())
+                    if (childListContent != null && !childListContent.isEmpty()) {
                         mChildList.add(childListContent);
-                    childListContent = new ArrayList<TravelItem>();
+                    } else {
+                        childListContent = new ArrayList<TravelItem>();
+                    }
                 }
                 childListContent.add(travelItem);
+                if (travelItem.equals(lastTravelItem)) {
+                    // if check last object or not
+                    mChildList.add(childListContent);
+                }
             }
 
             mListView.setAdapter(new BaseExpandableAdapter(this, mGroupList, mChildList));

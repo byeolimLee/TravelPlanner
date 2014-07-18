@@ -4,6 +4,8 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.starim.android.apps.travelplanner.TravelItemCategory;
 
+import java.util.AbstractCollection;
+
 /**
  * Created by starim on 14. 7. 2..
  */
@@ -90,9 +92,7 @@ public class TravelItemTransport extends TravelItem {
     public TravelItemTransport() {}
 
     @Override
-    public void setList(TravelList list) {
-        this.list = list;
-    }
+    public void setList(TravelList travelList) {this.list = travelList; }
 
     @Override
     public void setType(String type) {
@@ -108,4 +108,19 @@ public class TravelItemTransport extends TravelItem {
     @Override
     public void setEndDate(String endDate) { this.endDate = endDate; }
 
+    @Override
+    public int hashCode() {
+        String buffer = super.hashCode() + this.name;
+        return buffer.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (super.equals(other) == false)
+            return false;
+
+        if (name.equals(((TravelItemTransport) other).name) == false)
+            return false;
+        return true;
+    }
 }
