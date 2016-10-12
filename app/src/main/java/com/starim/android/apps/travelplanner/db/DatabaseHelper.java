@@ -10,9 +10,10 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.starim.android.apps.travelplanner.model.TravelItemAccommodation;
+import com.starim.android.apps.travelplanner.model.TravelItemRestaurantNStore;
+import com.starim.android.apps.travelplanner.model.TravelItemTouristAttraction;
 import com.starim.android.apps.travelplanner.model.TravelItemTransport;
 import com.starim.android.apps.travelplanner.model.TravelList;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	private Dao<TravelList, Integer> TravelListDao = null;
 	private Dao<TravelItemAccommodation, Integer> TravelItemAccommodationDao = null;
     private Dao<TravelItemTransport, Integer> TravelItemTransportDao = null;
+    private Dao<TravelItemRestaurantNStore, Integer> TravelItemRestaurantNStoreDao = null;
+    private Dao<TravelItemTouristAttraction, Integer> TravelItemTouristAttractionDao = null;
 
     public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, CURRENT_DATEBASE_VERSION);
@@ -42,6 +45,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, TravelList.class);
 			TableUtils.createTable(connectionSource, TravelItemAccommodation.class);
             TableUtils.createTable(connectionSource, TravelItemTransport.class);
+            TableUtils.createTable(connectionSource, TravelItemRestaurantNStore.class);
+            TableUtils.createTable(connectionSource, TravelItemTouristAttraction.class);
 		} catch (SQLException e) {
 			Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
 			throw new RuntimeException(e);
@@ -111,4 +116,25 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return TravelItemAccommodationDao;
     }
 
+    public Dao<TravelItemRestaurantNStore, Integer> getTravelItemRestaurantNStoreDao() {
+        if (null == TravelItemRestaurantNStoreDao) {
+            try {
+                TravelItemRestaurantNStoreDao = getDao(TravelItemRestaurantNStore.class);
+            }catch (java.sql.SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return TravelItemRestaurantNStoreDao;
+    }
+
+    public Dao<TravelItemTouristAttraction, Integer> getTravelItemTouristAttractionDao() {
+        if (null == TravelItemTouristAttractionDao) {
+            try {
+                TravelItemTouristAttractionDao = getDao(TravelItemTouristAttraction.class);
+            }catch (java.sql.SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return TravelItemTouristAttractionDao;
+    }
 }

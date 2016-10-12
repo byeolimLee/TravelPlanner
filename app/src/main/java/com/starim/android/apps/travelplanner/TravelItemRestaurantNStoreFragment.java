@@ -18,26 +18,29 @@ import com.starim.android.apps.travelplanner.db.DatabaseManager;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class TravelItemAccommodationFragment extends Fragment implements Animation.AnimationListener  {
+public class TravelItemRestaurantNStoreFragment extends Fragment implements Animation.AnimationListener  {
 
-    private static final String TAG = "TravelItemAccommodationFragment";
+    private static final String TAG = "TravelItemRestaurantNStoreFragment";
 
     private static final String ARG_TRAVEL_LIST_ID = "travelListId";
 
     @InjectView(R.id.travelitem_name_edit) EditText mTravelItemNameEdit;
-    @InjectView(R.id.travelitem_location_edit) EditText mTravelItemLocationEdit;
+    @InjectView(R.id.travelitem_stuff_edit) EditText mTravelItemStuffEdit;
+    @InjectView(R.id.travelitem_price_edit) EditText mTravelItemPriceEdit;
     @InjectView(R.id.travelitem_howtofind_edit) EditText mTravelItemHowToFindEdit;
     @InjectView(R.id.travelitem_notes_edit) TextView mTravelItemNoteEdit;
 
-    public static TravelItemAccommodationFragment newInstance(int travelListId) {
-        TravelItemAccommodationFragment fragment = new TravelItemAccommodationFragment();
+
+    public static TravelItemRestaurantNStoreFragment newInstance(int travelListId) {
+        TravelItemRestaurantNStoreFragment fragment = new TravelItemRestaurantNStoreFragment();
         Bundle args=new Bundle();
         args.putInt(ARG_TRAVEL_LIST_ID, travelListId);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public TravelItemAccommodationFragment() {}
+
+    public TravelItemRestaurantNStoreFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,14 +49,15 @@ public class TravelItemAccommodationFragment extends Fragment implements Animati
         // Activity.onOptionsItemSelected will call Fragment.onOptionsItemSelected
         setHasOptionsMenu(true);
 
-        View view = inflater.inflate(R.layout.fragment_travelitem_detail_accommodation, container, false);
+        View view = inflater.inflate(R.layout.fragment_travelitem_detail_restaurantstore, container, false);
         ButterKnife.inject(this, view);
 
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {}
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+    }
 
     @Override
     public void onResume() {
@@ -79,10 +83,10 @@ public class TravelItemAccommodationFragment extends Fragment implements Animati
 
                 int travelListId = getArguments().getInt(ARG_TRAVEL_LIST_ID);
 
-                Log.i("TravelItemAccommodationFragment", "travelListId: " + travelListId + " travelItemTitle:" + travelItemTitle +
-                        " Name:" + mTravelItemNameEdit.getText().toString() + " Location:" + mTravelItemLocationEdit.getText().toString() +
+                Log.i("TravelItemRestaurantNStoreFragment", "travelListId: " + travelListId + " travelItemTitle:" + travelItemTitle +
+                        " Name:" + mTravelItemNameEdit.getText().toString() + " Stuff:" + mTravelItemStuffEdit.getText().toString() +
+                        " Price: " + mTravelItemPriceEdit.getText().toString() +
                         " HowToGet:" + mTravelItemHowToFindEdit.getText().toString() + " Notes:" + mTravelItemNoteEdit.getText().toString());
-
 
                 if (mTravelItemNameEdit.getText().toString().isEmpty()) {
                     String message = "should enter accommodation name";
@@ -90,9 +94,9 @@ public class TravelItemAccommodationFragment extends Fragment implements Animati
                     return false;
                 }
 
-                DatabaseManager.getInstance().newTravelItemAccommdation(travelListId, travelItemTitle,
+                DatabaseManager.getInstance().newTravelItemRestaurantNStore(travelListId, travelItemTitle,
                         String.valueOf(travelItemStartDate), String.valueOf(travelItemEndDate),
-                        mTravelItemNameEdit.getText().toString(), mTravelItemLocationEdit.getText().toString(),
+                        mTravelItemNameEdit.getText().toString(), mTravelItemStuffEdit.getText().toString(), mTravelItemPriceEdit.getText().toString(),
                         mTravelItemHowToFindEdit.getText().toString(), mTravelItemNoteEdit.getText().toString());
 
                 getActivity().finish();

@@ -7,15 +7,20 @@ import com.starim.android.apps.travelplanner.TravelItemCategory;
 /**
  * Created by starim on 14. 7. 2..
  */
-
 @DatabaseTable
-public class TravelItemAccommodation extends TravelItem {
+public class TravelItemTouristAttraction extends TravelItem {
 
     @DatabaseField
     private String name;
 
     @DatabaseField
     private String location;
+
+    @DatabaseField
+    private String admissionFee;
+
+    @DatabaseField
+    private String admissionHour;
 
     @DatabaseField
     private String howToFind;
@@ -39,12 +44,20 @@ public class TravelItemAccommodation extends TravelItem {
         this.location = location;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getAdmissionFee() {
+        return admissionFee;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setAdmissionFee(String admissionFee) {
+        this.admissionFee = admissionFee;
+    }
+
+    public String getAdmissionHour() {
+        return admissionHour;
+    }
+
+    public void setAdmissionHour(String admissionHour) {
+        this.admissionHour = admissionHour;
     }
 
     public String getHowToFind() {
@@ -55,6 +68,14 @@ public class TravelItemAccommodation extends TravelItem {
         this.howToFind = howToFind;
     }
 
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
     public void setupItemDefault(TravelList list, String type, String title, String startDate, String endDate) {
         this.setList(list);
         this.setType(type);
@@ -63,19 +84,21 @@ public class TravelItemAccommodation extends TravelItem {
         this.setEndDate(endDate);
     }
 
-    public void setupItemSpecific(String name, String location, String howToFind, String notes) {
+    public void setupItemSpecific(String name, String location, String admissionFee, String admissionHour, String howToFind, String notes) {
         this.setName(name);
         this.setLocation(location);
+        this.setAdmissionFee(admissionFee);
+        this.setAdmissionHour(admissionHour);
         this.setHowToFind(howToFind);
         this.setNotes(notes);
     }
 
-    public TravelItemAccommodation(TravelList list, String title, String startDate, String endDate, String name, String location, String howToFind, String notes) {
-        setupItemDefault(list, TravelItemCategory.TYPE_STRING_ACCOMMODATIONS, title, startDate, endDate);
-        setupItemSpecific(name, location, howToFind, notes);
+    public TravelItemTouristAttraction(TravelList list, String title, String startDate, String endDate, String name, String location, String admissionFee, String admissionHour, String howToFind, String notes) {
+        setupItemDefault(list, TravelItemCategory.TYPE_STRING_TOURISTATTRACTIONS, title, startDate, endDate);
+        setupItemSpecific(name, location, admissionFee, admissionHour, howToFind, notes);
     }
 
-    public TravelItemAccommodation() {}
+    public TravelItemTouristAttraction() {}
 
     @Override
     public void setList(TravelList travelList) {this.list = travelList; }
@@ -105,7 +128,7 @@ public class TravelItemAccommodation extends TravelItem {
         if (super.equals(other) == false)
             return false;
 
-        if (name.equals(((TravelItemAccommodation) other).name) == false)
+        if (name.equals(((TravelItemTouristAttraction) other).name) == false)
             return false;
         return true;
     }

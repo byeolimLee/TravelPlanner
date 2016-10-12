@@ -28,13 +28,13 @@
             android:text="click"/>
 
         <EditText
-            android:id="@+id/schedule_name_edit"
+            android:id="@+id/schedule_title_edit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="8dip"
             android:gravity="center_vertical"
             android:paddingLeft="8dip"
-            android:hint="schedule name"
+            android:hint="schedule title"
             android:lines="2">
             <requestFocus />
         </EditText>
@@ -53,7 +53,7 @@
             android:layout_width="210dip"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:background="@color/text_bgcolor_gray">
+            android:background="@color/bgcolor_gray">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -76,7 +76,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dip"
             android:gravity="center"
-            android:background="@color/text_bgcolor_gray"/>
+            android:background="@color/bgcolor_gray"/>
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -92,7 +92,7 @@
             android:layout_width="210dip"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:background="@color/text_bgcolor_gray">
+            android:background="@color/bgcolor_gray">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -115,13 +115,13 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dip"
             android:gravity="center"
-            android:background="@color/text_bgcolor_gray"/>
+            android:background="@color/bgcolor_gray"/>
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/travel_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0px"
-        android:layout_marginTop = "45dip"
+        android:layout_marginTop = "30dip"
         android:layout_weight="2"/>
 </LinearLayout>

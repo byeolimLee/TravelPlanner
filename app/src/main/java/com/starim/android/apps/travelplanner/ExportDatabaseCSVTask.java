@@ -53,15 +53,16 @@ public class ExportDatabaseCSVTask extends AsyncTask<Void, Void, Boolean> {
 
             List<TravelItemTransport> list = DatabaseManager.getInstance().getAllTravelItemTransport(mTravelId);
 
-            String attrString[] = {"travelId", "type", "title", "startDate", "endDate", "name", "vehicle", "depCity", "arrCity", "duration" };
+            String attrString[] = {"travelId", "type", "title", "startDate", "endDate", "name", "depCity", "arrCity", "duration", "notes" };
             csvWriter.writeNext(attrString);
 
             if (list != null && list.size() > 0) {
                for (int index = 0; index <list.size(); index++) {
                    TravelItemTransport travelItem = list.get(index);
                    String valueString[] = {String.valueOf(travelItem.getList().getId()), travelItem.getType(), travelItem.getTitle(),
-                                           travelItem.getStartDate(), travelItem.getEndDate(), travelItem.getName(), travelItem.getVehicle(),
-                                           travelItem.getDepartureCity(), travelItem.getArrivalCity(), String.valueOf(travelItem.getDuration())};
+                                           travelItem.getStartDate(), travelItem.getEndDate(), travelItem.getName(),
+                                           travelItem.getDepartureCity(), travelItem.getArrivalCity(),
+                                           String.valueOf(travelItem.getDuration()), travelItem.getNote()};
                    csvWriter.writeNext(valueString);
                }
             }

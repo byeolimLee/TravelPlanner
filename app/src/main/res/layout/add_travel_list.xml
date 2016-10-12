@@ -46,7 +46,6 @@
             android:id="@+id/desc_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
-            <requestFocus />
         </EditText>
     </LinearLayout>
 
@@ -67,7 +66,6 @@
             android:id="@+id/date_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
-            <requestFocus />
         </EditText>
     </LinearLayout>
 

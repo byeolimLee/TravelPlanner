@@ -5,4 +5,20 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="ExpandableScheduleListRow" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16.25dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ExpandableScheduleListRow.Gray.Medium" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">14.12dp</item>
+    </style>
+
+    <style name="ExpandableScheduleListRow.MoreLightGray.Small" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/more_light_gray</item>
+        <item name="android:textSize">11.63dp</item>
+    </style>
+
 </resources>

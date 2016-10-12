@@ -8,17 +8,16 @@ public class TravelItemCategory {
     public String typeString;
     public int typeId;
 
-    public static final int TYPE_ID_TRANSPORT = 0x01;
-    public static final int TYPE_ID_ACCOMMODATION = 0x02;
-    public static final int TYPE_ID_SHOPPINGPLACES = 0x03;
-    public static final int TYPE_ID_RESTUARANT = 0x04;
-    public static final int TYPE_ID_TOURISTPLACES = 0x05;
+    public static final int TYPE_ID_NONE = 0x00;
+    public static final int TYPE_ID_TRANSPORTS = 0x01;
+    public static final int TYPE_ID_ACCOMMODATIONS = 0x02;
+    public static final int TYPE_ID_RESTUARANTSNSTORES = 0x03;
+    public static final int TYPE_ID_TOURISTATTRACTIONS = 0x04;
 
-    public static final String TYPE_STRING_TRANSPORT = "Transport";
-    public static final String TYPE_STRING_ACCOMMODATION = "Accommodation";
-    public static final String TYPE_STRING_SHOPPINGPLACES = "ShoppingPlaces";
-    public static final String TYPE_STRING_RESTUARANT = "Restaurant";
-    public static final String TYPE_STRING_TOURISTPLACES = "TouristPlaces";
+    public static final String TYPE_STRING_TRANSPORTS = "Transports";
+    public static final String TYPE_STRING_ACCOMMODATIONS = "Accommodations";
+    public static final String TYPE_STRING_RESTUARANTSNSTORES = "Restaurants & Stores";
+    public static final String TYPE_STRING_TOURISTATTRACTIONS = "TouristAttractions";
 
     public TravelItemCategory(int resourceId, String typeString, int typeId) {
         this.resourceId = resourceId;
@@ -27,10 +26,9 @@ public class TravelItemCategory {
     }
 
     public static final TravelItemCategory[] CATEGORIES = {
-            new TravelItemCategory(R.drawable.p1, TYPE_STRING_TRANSPORT, TYPE_ID_TRANSPORT),
-            new TravelItemCategory(R.drawable.p2, TYPE_STRING_ACCOMMODATION, TYPE_ID_ACCOMMODATION),
-            new TravelItemCategory(R.drawable.p3, TYPE_STRING_SHOPPINGPLACES, TYPE_ID_SHOPPINGPLACES),
-            new TravelItemCategory(R.drawable.p4, TYPE_STRING_RESTUARANT, TYPE_ID_RESTUARANT),
-            new TravelItemCategory(R.drawable.p5, TYPE_STRING_TOURISTPLACES, TYPE_ID_TOURISTPLACES),
+            new TravelItemCategory(R.drawable.p1, TYPE_STRING_TRANSPORTS, TYPE_ID_TRANSPORTS),
+            new TravelItemCategory(R.drawable.p2, TYPE_STRING_ACCOMMODATIONS, TYPE_ID_ACCOMMODATIONS),
+            new TravelItemCategory(R.drawable.p3, TYPE_STRING_RESTUARANTSNSTORES, TYPE_ID_RESTUARANTSNSTORES),
+            new TravelItemCategory(R.drawable.p4, TYPE_STRING_TOURISTATTRACTIONS, TYPE_ID_TOURISTATTRACTIONS)
     };
 }

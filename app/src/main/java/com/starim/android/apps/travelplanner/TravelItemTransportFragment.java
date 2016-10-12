@@ -4,54 +4,103 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.starim.android.apps.travelplanner.db.DatabaseManager;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class TravelItemTransportFragment extends Fragment implements Animation.AnimationListener  {
 
     private static final String TAG = "TravelItemTransportFragment";
+    private static final String ARG_TRAVEL_LIST_ID = "travelListId";
 
-    private static final String ARG_RESOURCE_ID = "resource_id";
-    private static final String ARG_TITLE = "title";
-    private static final String ARG_X = "x";
-    private static final String ARG_Y = "y";
-    private static final String ARG_WIDTH = "width";
-    private static final String ARG_HEIGHT = "height";
+    @InjectView(R.id.travelitem_name_edit) EditText mTravelItemNameEdit;
+    @InjectView(R.id.travelitem_from_edit) EditText mTravelItemFromEdit;
+    @InjectView(R.id.travelitem_to_edit) EditText mTravelItemToEdit;
+    @InjectView(R.id.travelitem_notes_edit) TextView mTravelItemNoteEdit;
 
-    public static TravelItemTransportFragment newInstance(int x, int y, int width, int height){
-        TravelItemTransportFragment fragment= new TravelItemTransportFragment();
+    public static TravelItemTransportFragment newInstance(int travelListId) {
+        TravelItemTransportFragment fragment = new TravelItemTransportFragment();
         Bundle args=new Bundle();
-        args.putInt(ARG_RESOURCE_ID, R.drawable.p1);
-        args.putString(ARG_TITLE, TravelItemCategory.TYPE_STRING_TRANSPORT);
-        args.putInt(ARG_X,x);
-        args.putInt(ARG_Y,y);
-        args.putInt(ARG_WIDTH,width);
-        args.putInt(ARG_HEIGHT,height);
+
+        args.putInt(ARG_TRAVEL_LIST_ID, travelListId);
         fragment.setArguments(args);
         return fragment;
     }
 
-
-    public TravelItemTransportFragment() {
-    }
+    public TravelItemTransportFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_travelitem_detail_content, container, false);
+        // if this is set true,
+        // Activity.onCreateOptionsMenu will call Fragment.onCreateOptionsMenu
+        // Activity.onOptionsItemSelected will call Fragment.onOptionsItemSelected
+        setHasOptionsMenu(true);
+
+        View view = inflater.inflate(R.layout.fragment_travelitem_detail_transport, container, false);
+        ButterKnife.inject(this, view);
+
+        return view;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-    }
+    public void onViewCreated(View view, Bundle savedInstanceState) {}
 
     @Override
     public void onResume() {
         super.onResume();
+
+        // destroy all menu and re-call onCreateOptionsMenu
+        getActivity().invalidateOptionsMenu();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_add:
+                String travelItemTitle = ((AddTravelScheduleActivity)getActivity()).getScheduleTitle();
+                if (travelItemTitle == null || travelItemTitle.isEmpty()) {
+                    String message = "should enter schedule title";
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+                long travelItemStartDate = ((AddTravelScheduleActivity)getActivity()).getTimeStartDate();
+                long travelItemEndDate = ((AddTravelScheduleActivity)getActivity()).getTimeEndDate();
+
+                int travelListId = getArguments().getInt(ARG_TRAVEL_LIST_ID);
+                Log.i("TravelItemTransportFragment", "travelListId: " + travelListId + " travelItemTitle:" + travelItemTitle +
+                       " Name:" + mTravelItemNameEdit.getText().toString() + " DepCity:" + mTravelItemFromEdit.getText().toString() + " ArrCity:" + mTravelItemToEdit.getText().toString());
+
+                if (mTravelItemNameEdit.getText().toString().isEmpty()) {
+                    String message = "should enter vehicle name";
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+                DatabaseManager.getInstance().newTravelItemTransport(travelListId, travelItemTitle,
+                        String.valueOf(travelItemStartDate), String.valueOf(travelItemEndDate), mTravelItemNameEdit.getText().toString(),
+                        mTravelItemFromEdit.getText().toString(), mTravelItemToEdit.getText().toString(), mTravelItemNoteEdit.getText().toString());
+
+                // 사용자가 백버튼을 누른 것와 같은 효과를 위해서 backstack에 있는 fragment를 pop함
+                // getSupportFragmentManager().popBackStack();
+
+                getActivity().finish();
+
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     /**
      * Bind the views inside of parent with the fragment arguments.
@@ -63,10 +112,10 @@ public class TravelItemTransportFragment extends Fragment implements Animation.A
         if (args == null) {
             return;
         }
-        ImageView image = (ImageView) parent.findViewById(R.id.image);
-        image.setImageResource(args.getInt(ARG_RESOURCE_ID));
-        TextView title = (TextView) parent.findViewById(R.id.title);
-        title.setText(args.getString(ARG_TITLE));
+
+        String travelItemTitle = ((AddTravelScheduleActivity)getActivity()).getScheduleTitle();
+        if (!travelItemTitle.isEmpty())
+            mTravelItemNameEdit.requestFocus();
     }
 
     @Override

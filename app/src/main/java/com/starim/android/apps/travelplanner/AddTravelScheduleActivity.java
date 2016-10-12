@@ -7,7 +7,9 @@ import android.support.v4.view.MenuItemCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.starim.android.apps.travelplanner.common.CustomContextMenu;
 import com.starim.android.apps.travelplanner.common.CustomMenuItem;
@@ -15,6 +17,7 @@ import com.starim.android.apps.travelplanner.common.DatePickerFragment;
 import com.starim.android.apps.travelplanner.common.DateTimeUtils;
 import com.starim.android.apps.travelplanner.common.TimePickerFragment;
 import com.starim.android.apps.travelplanner.db.DatabaseManager;
+import com.starim.android.apps.travelplanner.model.TravelList;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,25 +28,25 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class AddTravelScheduleActivity extends FragmentActivity {
-    int mTravelListId;
-    int mTravelItemType;
-    Calendar mStartDate;
-    Calendar mEndDate;
+    private int mTravelListId;
+    private int mTravelItemType = TravelItemCategory.TYPE_ID_NONE;
+    private Calendar mStartDate;
+    private Calendar mEndDate;
 
-    @InjectView(R.id.startdate_yyyymmdd_edit) TextView startDateYYYYMMDDEdit;
-    @InjectView(R.id.startdate_hhmm_edit) TextView startDateHHMMEdit;
-    @InjectView(R.id.enddate_yyyymmdd_edit) TextView endDateYYYYMMDDEdit;
-    @InjectView(R.id.enddate_hhmm_edit) TextView endDateHHMMEdit;
+    @InjectView(R.id.schedule_title_edit) EditText mScheduleTitleEdit;
+    @InjectView(R.id.startdate_yyyymmdd_edit) TextView mStartDateYYYYMMDDEdit;
+    @InjectView(R.id.startdate_hhmm_edit) TextView mStartDateHHMMEdit;
+    @InjectView(R.id.enddate_yyyymmdd_edit) TextView mEndDateYYYYMMDDEdit;
+    @InjectView(R.id.enddate_hhmm_edit) TextView mEndDateHHMMEdit;
 
     @OnClick(R.id.select_travel_item)
     void setupCustomMenuItems() {
         List<CustomMenuItem> menus = new ArrayList<CustomMenuItem>();
 
-        menus.add(TRAVEL_ITEM_TRANSPORT);
-        menus.add(TRAVEL_ITEM_ACCOMMODATION);
-        menus.add(TRAVEL_ITEM_SHOPPINGPLACES);
-        menus.add(TRAVEL_ITEM_RESTUARANT);
-        menus.add(TRAVEL_ITEM_TOURISTPLACES);
+        menus.add(TRAVEL_ITEM_TRANSPORTS);
+        menus.add(TRAVEL_ITEM_ACCOMMODATIONS);
+        menus.add(TRAVEL_ITEM_RESTUARANTSNSTORES);
+        menus.add(TRAVEL_ITEM_TOURISTATTRACTIONS);
 
         CustomContextMenu.show(AddTravelScheduleActivity.this, getResources().getString(R.string.title_travel_category_select), menus);
     }
@@ -61,7 +64,7 @@ public class AddTravelScheduleActivity extends FragmentActivity {
                 calender.set(year, monthOfYear, dayOfMonth);
 
                 mStartDate = calender;
-                setDateText(startDateYYYYMMDDEdit, DateTimeUtils.createGlobalFormatDate(year, monthOfYear, dayOfMonth));
+                setDateText(mStartDateYYYYMMDDEdit, DateTimeUtils.createGlobalFormatDate(year, monthOfYear, dayOfMonth));
             }
         });
         dateFragment.show(getSupportFragmentManager(), "datePicker");
@@ -81,7 +84,7 @@ public class AddTravelScheduleActivity extends FragmentActivity {
                 calender.set(Calendar.MINUTE, minute);
 
                 mStartDate = calender;
-                setTimeText(startDateHHMMEdit, DateTimeUtils.createGlobalFormatTime(hourOfDay, minute, calender.get(Calendar.AM_PM)));
+                setTimeText(mStartDateHHMMEdit, DateTimeUtils.createGlobalFormatTime(hourOfDay, minute, calender.get(Calendar.AM_PM)));
             }
         });
         timeFragment.show(getSupportFragmentManager(), "timePicker");
@@ -100,7 +103,7 @@ public class AddTravelScheduleActivity extends FragmentActivity {
                 calender.set(year, monthOfYear, dayOfMonth);
 
                 mEndDate = calender;
-                setDateText(endDateYYYYMMDDEdit, DateTimeUtils.createGlobalFormatDate(year, monthOfYear, dayOfMonth));
+                setDateText(mEndDateYYYYMMDDEdit, DateTimeUtils.createGlobalFormatDate(year, monthOfYear, dayOfMonth));
             }
         });
         dateFragment.show(getSupportFragmentManager(), "datePicker");
@@ -121,7 +124,7 @@ public class AddTravelScheduleActivity extends FragmentActivity {
                 calender.set(Calendar.MINUTE, minute);
 
                 mEndDate = calender;
-                setTimeText(endDateHHMMEdit, DateTimeUtils.createGlobalFormatTime(hourOfDay, minute, calender.get(Calendar.AM_PM)));
+                setTimeText(mEndDateHHMMEdit, DateTimeUtils.createGlobalFormatTime(hourOfDay, minute, calender.get(Calendar.AM_PM)));
             }
         });
         timeFragment.show(getSupportFragmentManager(), "timePicker");
@@ -132,20 +135,12 @@ public class AddTravelScheduleActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_travel_schedule);
 
-        Bundle bundle = getIntent().getExtras();
-        if (null!=bundle && bundle.containsKey(Constants.keyTravelListId)) {
-            mTravelListId = bundle.getInt(Constants.keyTravelListId);
-        }
-
         ButterKnife.inject(this);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         TravelItemTransitionFragment fragment = new TravelItemTransitionFragment();
         transaction.replace(R.id.travel_fragment_container, fragment);
         transaction.commit();
-
-        setStartDate(Calendar.getInstance());
-        setEndDate(Calendar.getInstance());
     }
 
     private void setDateText(TextView textView, String date) {
@@ -183,8 +178,8 @@ public class AddTravelScheduleActivity extends FragmentActivity {
         int currentAmPm = calendar.get(Calendar.AM_PM);
 
         mStartDate = calendar;
-        setDateText(startDateYYYYMMDDEdit, DateTimeUtils.createGlobalFormatDate(currentYear, currentMonth, currentDay));
-        setTimeText(startDateHHMMEdit, DateTimeUtils.createGlobalFormatTime(currentHour, currentMinute, currentAmPm));
+        setDateText(mStartDateYYYYMMDDEdit, DateTimeUtils.createGlobalFormatDate(currentYear, currentMonth, currentDay));
+        setTimeText(mStartDateHHMMEdit, DateTimeUtils.createGlobalFormatTime(currentHour, currentMinute, currentAmPm));
     }
 
     private void setEndDate(Calendar calendar) {
@@ -200,20 +195,33 @@ public class AddTravelScheduleActivity extends FragmentActivity {
         int currentAmPm = calendar.get(Calendar.AM_PM);
 
         mEndDate = calendar;
-        setDateText(endDateYYYYMMDDEdit, DateTimeUtils.createGlobalFormatDate(currentYear, currentMonth, currentDay));
-        setTimeText(endDateHHMMEdit, DateTimeUtils.createGlobalFormatTime(currentHour, currentMinute, currentAmPm));
+        setDateText(mEndDateYYYYMMDDEdit, DateTimeUtils.createGlobalFormatDate(currentYear, currentMonth, currentDay));
+        setTimeText(mEndDateHHMMEdit, DateTimeUtils.createGlobalFormatTime(currentHour, currentMinute, currentAmPm));
     }
+
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        Bundle bundle = getIntent().getExtras();
+        if (null!=bundle && bundle.containsKey(Constants.keyTravelListId)) {
+            mTravelListId = bundle.getInt(Constants.keyTravelListId);
+
+            TravelList travelList = DatabaseManager.getInstance().getTravelistWithId(mTravelListId);
+            setTitle("Travel list '" + travelList.getTitle() + "'");
+
+        }
+        setStartDate(Calendar.getInstance());
+        setEndDate(Calendar.getInstance());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.travel_options_menu, menu);
+
         MenuItem addItem = menu.add(0, R.id.menu_add, 0, R.string.menu_add);
-        addItem.setIcon(R.drawable.ic_action_location);
+//        addItem.setIcon(R.drawable.ic_action_location);
 
         // Need to use MenuItemCompat methods to call any action item related methods
         MenuItemCompat.setShowAsAction(addItem, MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -228,116 +236,76 @@ public class AddTravelScheduleActivity extends FragmentActivity {
         // as you specify a parent activity in AndroidManifest.xml.
 
         switch (item.getItemId()) {
-            case R.id.menu_refresh:
-                // Here we might start a background refresh task
-                return true;
-
-            case R.id.menu_settings:
-                // Here we would open up our settings activity
-                return true;
-
-            case R.id.menu_add:
-                switch(mTravelItemType) {
-                    case TravelItemCategory.TYPE_ID_TRANSPORT:
-                        DatabaseManager.getInstance().newTravelItemTransport(mTravelListId, "aaaaaa",
-                                                    String.valueOf(mStartDate.getTimeInMillis()), String.valueOf(mEndDate.getTimeInMillis()),
-                                                    "OZ551", "flight", "Seoul", "Istanbul");
-                        break;
-                    case TravelItemCategory.TYPE_ID_ACCOMMODATION:
-                        break;
-                    case TravelItemCategory.TYPE_ID_SHOPPINGPLACES:
-                        break;
-                    case TravelItemCategory.TYPE_ID_RESTUARANT:
-                        break;
-                    case TravelItemCategory.TYPE_ID_TOURISTPLACES:
+            case R.id.menu_add :
+                if (mScheduleTitleEdit.getText().toString().isEmpty() || mTravelItemType == TravelItemCategory.TYPE_ID_NONE) {
+                    String message = "should enter schedule title";
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                    return false;
                 }
-                return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private final CustomMenuItem TRAVEL_ITEM_TRANSPORT = new CustomMenuItem(TravelItemCategory.TYPE_STRING_TRANSPORT, R.drawable.p1, new View.OnClickListener() {
+    public String getScheduleTitle() { return this.mScheduleTitleEdit.getText().toString(); }
+
+    public long getTimeStartDate() {
+        return this.mStartDate.getTimeInMillis();
+    }
+
+    public long getTimeEndDate() {
+        return this.mEndDate.getTimeInMillis();
+    }
+
+    private final CustomMenuItem TRAVEL_ITEM_TRANSPORTS = new CustomMenuItem(TravelItemCategory.TYPE_STRING_TRANSPORTS,
+            new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mTravelItemType = TravelItemCategory.TYPE_ID_TRANSPORT;
+            mTravelItemType = TravelItemCategory.TYPE_ID_TRANSPORTS;
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.travel_fragment_container,
-                            TravelItemTransportFragment.newInstance((int) view.getX(), (int) view.getY(),
-                                                                   view.getWidth(), view.getHeight())
-                    )
-                    // We push the fragment transaction to back stack. User can go back to the
-                    // previous fragment by pressing back button.
-                    .addToBackStack("detail")
+                    .replace(R.id.travel_fragment_container, TravelItemTransportFragment.newInstance(mTravelListId))
+                    .addToBackStack("transport")
                     .commit();
         }
     });
 
-    private final CustomMenuItem TRAVEL_ITEM_ACCOMMODATION = new CustomMenuItem(TravelItemCategory.TYPE_STRING_ACCOMMODATION, new View.OnClickListener() {
+    private final CustomMenuItem TRAVEL_ITEM_ACCOMMODATIONS = new CustomMenuItem(TravelItemCategory.TYPE_STRING_ACCOMMODATIONS,
+            new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mTravelItemType = TravelItemCategory.TYPE_ID_ACCOMMODATION;
+            mTravelItemType = TravelItemCategory.TYPE_ID_ACCOMMODATIONS;
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.travel_fragment_container,
-                            TravelItemAccommodationFragment.newInstance((int) view.getX(), (int) view.getY(),
-                                    view.getWidth(), view.getHeight())
-                    )
-                    // We push the fragment transaction to back stack. User can go back to the
-                    // previous fragment by pressing back button.
-                    .addToBackStack("detail")
+                    .replace(R.id.travel_fragment_container, TravelItemAccommodationFragment.newInstance(mTravelListId))
+                    .addToBackStack("accommodation")
                     .commit();
         }
     });
 
-    private final CustomMenuItem TRAVEL_ITEM_SHOPPINGPLACES = new CustomMenuItem(TravelItemCategory.TYPE_STRING_SHOPPINGPLACES, new View.OnClickListener() {
+    private final CustomMenuItem TRAVEL_ITEM_RESTUARANTSNSTORES  = new CustomMenuItem(TravelItemCategory.TYPE_STRING_RESTUARANTSNSTORES,
+            new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mTravelItemType = TravelItemCategory.TYPE_ID_SHOPPINGPLACES;
+            mTravelItemType = TravelItemCategory.TYPE_ID_RESTUARANTSNSTORES;
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.travel_fragment_container,
-                            TravelItemShoppingPlacesFragment.newInstance((int) view.getX(), (int) view.getY(),
-                                    view.getWidth(), view.getHeight())
-                    )
-                    // We push the fragment transaction to back stack. User can go back to the
-                    // previous fragment by pressing back button.
-                    .addToBackStack("detail")
+                    .replace(R.id.travel_fragment_container, TravelItemRestaurantNStoreFragment.newInstance(mTravelListId))
+                    .addToBackStack("restuarantNstore")
                     .commit();
         }
     });
 
-    private final CustomMenuItem TRAVEL_ITEM_RESTUARANT  = new CustomMenuItem(TravelItemCategory.TYPE_STRING_RESTUARANT, new View.OnClickListener() {
+    private final CustomMenuItem TRAVEL_ITEM_TOURISTATTRACTIONS = new CustomMenuItem(TravelItemCategory.TYPE_STRING_TOURISTATTRACTIONS,
+            new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mTravelItemType = TravelItemCategory.TYPE_ID_RESTUARANT;
+            mTravelItemType = TravelItemCategory.TYPE_ID_TOURISTATTRACTIONS;
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.travel_fragment_container,
-                            TravelItemRestaurantFragment.newInstance((int) view.getX(), (int) view.getY(),
-                                    view.getWidth(), view.getHeight())
-                    )
-                    // We push the fragment transaction to back stack. User can go back to the
-                    // previous fragment by pressing back button.
-                    .addToBackStack("detail")
-                    .commit();
-        }
-    });
-
-    private final CustomMenuItem TRAVEL_ITEM_TOURISTPLACES = new CustomMenuItem(TravelItemCategory.TYPE_STRING_TOURISTPLACES, new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            mTravelItemType = TravelItemCategory.TYPE_ID_TOURISTPLACES;
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.travel_fragment_container,
-                            TravelItemTourlistPlacesFragment.newInstance((int) view.getX(), (int) view.getY(),
-                                    view.getWidth(), view.getHeight())
-                    )
-                    // We push the fragment transaction to back stack. User can go back to the
-                    // previous fragment by pressing back button.
-                    .addToBackStack("detail")
+                            TravelItemTouristAttractionFragment.newInstance(mTravelListId))
+                    .addToBackStack("touristAttractions")
                     .commit();
         }
     });

@@ -16,12 +16,9 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class AddTravelListActivity extends Activity {
-    @InjectView(R.id.title_edit)
-    EditText mTitleEdit;
-    @InjectView(R.id.desc_edit)
-    EditText mDescEdit;
-    @InjectView(R.id.date_edit)
-    EditText mDateEdit;
+    @InjectView(R.id.title_edit) EditText mTitleEdit;
+    @InjectView(R.id.desc_edit) EditText mDescEdit;
+    @InjectView(R.id.date_edit) EditText mDateEdit;
 
     private TravelList mTravelList;
 

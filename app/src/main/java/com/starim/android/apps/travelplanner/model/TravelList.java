@@ -33,6 +33,12 @@ public class TravelList {
     @ForeignCollectionField
     private ForeignCollection<TravelItemAccommodation> accommodations;
 
+    @ForeignCollectionField
+    private ForeignCollection<TravelItemTouristAttraction> touristAttractions;
+
+    @ForeignCollectionField
+    private ForeignCollection<TravelItemRestaurantNStore> restaurantNStores;
+
     private ArrayList<TravelItem> items;
 
     public void setId(int id) {this.id = id;}
@@ -73,6 +79,14 @@ public class TravelList {
         return this.accommodations;
     }
 
+    public ForeignCollection<TravelItemTouristAttraction> getTouristAttractions() {
+        return this.touristAttractions;
+    }
+
+    public ForeignCollection<TravelItemRestaurantNStore> getRestaurantNStores() {
+        return this.restaurantNStores;
+    }
+
     private int addTravelItemListFromForeignCollection(ForeignCollection<? extends TravelItem> collection, ArrayList<TravelItem> arrayList) {
         CloseableIterator<? extends TravelItem> iterator = null;
         try {
@@ -98,6 +112,8 @@ public class TravelList {
 
         addTravelItemListFromForeignCollection(getTransports(), travelItemList);
         addTravelItemListFromForeignCollection(getAccommodations(), travelItemList);
+        addTravelItemListFromForeignCollection(getTouristAttractions(), travelItemList);
+        addTravelItemListFromForeignCollection(getRestaurantNStores(), travelItemList);
 
         return travelItemList;
     }

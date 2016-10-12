@@ -17,7 +17,7 @@
     <color name="light_black_tarnsparent">#99000000</color>
     <color name="red">#FFCC6666</color>
 
-    <color name="text_bgcolor_gray">#FFF6F6F6</color>
+    <color name="bgcolor_gray">#FFF6F6F6</color>
     <color name="popup_list_title_color">#FFE25454</color>
     <color name="popup_list_title_linecolor">#FFE25454</color>
     <color name="popup_list_item_color">#FF000000</color>

@@ -6,22 +6,22 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.starim.android.apps.travelplanner.common.DateTimeUtils;
 import com.starim.android.apps.travelplanner.db.DatabaseManager;
 import com.starim.android.apps.travelplanner.model.TravelItem;
-import com.starim.android.apps.travelplanner.model.TravelItemTransport;
 import com.starim.android.apps.travelplanner.model.TravelList;
 
 import java.util.ArrayList;
@@ -38,17 +38,24 @@ public class TravelScheduleActivity extends Activity {
 
     private ExpandableListView mListView;
 
-    @OnClick(R.id.button_add)
+    @OnClick(R.id.add_new_schedule)
     public void setupButtonAdd() {
         Intent intent = new Intent(this, AddTravelScheduleActivity.class);
         intent.putExtra(Constants.keyTravelListId, mTravelList.getId());
         startActivity(intent);
     }
 
-    @OnClick(R.id.button_export)
-    public void setupButtonExport() {
-        new ExportDatabaseCSVTask(this, mTravelList.getId()).execute();
-    }
+//    @OnClick(R.id.button_add)
+//    public void setupButtonAdd() {
+//        Intent intent = new Intent(this, AddTravelScheduleActivity.class);
+//        intent.putExtra(Constants.keyTravelListId, mTravelList.getId());
+//        startActivity(intent);
+//    }
+//
+//    @OnClick(R.id.button_export)
+//    public void setupButtonExport() {
+//        new ExportDatabaseCSVTask(this, mTravelList.getId()).execute();
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,11 +109,11 @@ public class TravelScheduleActivity extends Activity {
             mChildList = new ArrayList<ArrayList<TravelItem>>();
             ArrayList<TravelItem> childListContent = null;
 
-            TravelItem lastTravelItem = travelItemList.get(travelItemList.size() - 1);
+            TravelItem lastTravelItem = (travelItemList.size() == 0) ? null : travelItemList.get(travelItemList.size() - 1);
 
             for (TravelItem travelItem : travelItemList) {
                 String pattern = getApplicationContext().getResources().getString(R.string.travel_schedule_group_date_pattern);
-                String month = DateTimeUtils.convertFormattedTimeFromSystemTime(pattern, Long.parseLong(travelItem.getStartDate()));
+                String yyyymmdd = DateTimeUtils.convertFormattedTimeFromSystemTime(pattern, Long.parseLong(travelItem.getStartDate()));
 //                Log.i("TravelSchedule:: ", "type:" + travelItem.getType() + " title:" +  travelItem.getTitle() + " startDate:" + travelItem.getStartDate() + " endDate:" + travelItem.getEndDate());
 //                if (travelItem instanceof TravelItemTransport) {
 //                    TravelItemTransport transportItem = (TravelItemTransport)travelItem;
@@ -114,8 +121,8 @@ public class TravelScheduleActivity extends Activity {
 //                            " depCity:" + transportItem.getDepartureCity() + " arrCity:" + transportItem.getArrivalCity() + " duration:" + transportItem.getDuration());
 //                }
 
-                if (!mGroupList.contains(month)) {
-                    mGroupList.add(month);
+                if (!mGroupList.contains(yyyymmdd)) {
+                    mGroupList.add(yyyymmdd);
                     if (childListContent != null && !childListContent.isEmpty()) {
                         mChildList.add(childListContent);
                     } else {
@@ -131,13 +138,17 @@ public class TravelScheduleActivity extends Activity {
 
             mListView.setAdapter(new BaseExpandableAdapter(this, mGroupList, mChildList));
 
+            for (int i=0; i < mListView.getExpandableListAdapter().getGroupCount(); i++) {
+                mListView.expandGroup(i);
+            }
+
             // 그룹 클릭 했을 경우 이벤트
             mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
                 @Override
                 public boolean onGroupClick(ExpandableListView parent, View v,
                                             int groupPosition, long id) {
-                    Toast.makeText(getApplicationContext(), "g click = " + groupPosition,
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "g click = " + groupPosition,
+//                            Toast.LENGTH_SHORT).show();
                     return false;
                 }
             });
@@ -147,8 +158,8 @@ public class TravelScheduleActivity extends Activity {
                 @Override
                 public boolean onChildClick(ExpandableListView parent, View v,
                                             int groupPosition, int childPosition, long id) {
-                    Toast.makeText(getApplicationContext(), "c click = " + childPosition,
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "c click = " + childPosition,
+//                            Toast.LENGTH_SHORT).show();
                     return false;
                 }
             });
@@ -157,8 +168,8 @@ public class TravelScheduleActivity extends Activity {
             mListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
                 @Override
                 public void onGroupCollapse(int groupPosition) {
-                    Toast.makeText(getApplicationContext(), "g Collapse = " + groupPosition,
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "g Collapse = " + groupPosition,
+//                            Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -166,8 +177,8 @@ public class TravelScheduleActivity extends Activity {
             mListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
                 @Override
                 public void onGroupExpand(int groupPosition) {
-                    Toast.makeText(getApplicationContext(), "g Expand = " + groupPosition,
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "g Expand = " + groupPosition,
+//                            Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -177,7 +188,8 @@ public class TravelScheduleActivity extends Activity {
         private ArrayList<String> groupList = null;
         private ArrayList<ArrayList<TravelItem>> childList = null;
         private LayoutInflater inflater = null;
-        private ViewHolder viewHolder = null;
+        private GroupViewHolder groupViewHolder = null;
+        private ChildViewHolder childViewHolder = null;
 
         public BaseExpandableAdapter(Context context, ArrayList<String> groupList,
                                      ArrayList<ArrayList<TravelItem>> childList) {
@@ -213,23 +225,17 @@ public class TravelScheduleActivity extends Activity {
             View v = convertView;
 
             if (v == null) {
-                viewHolder = new ViewHolder();
-                v = inflater.inflate(R.layout.travel_schedule_list_row, parent, false);
-                viewHolder.tv_groupName = (TextView) v.findViewById(R.id.tv_group);
-                viewHolder.iv_image = (ImageView) v.findViewById(R.id.iv_image);
-                v.setTag(viewHolder);
+                groupViewHolder = new GroupViewHolder();
+              v = inflater.inflate(R.layout.travel_schedule_list_row_group, parent, false);
+                groupViewHolder.groupName = (TextView) v.findViewById(R.id.group_name);
+                groupViewHolder.groupExpandIcon = (ImageView) v.findViewById(R.id.group_indicator_expand_icon);
+                v.setTag(groupViewHolder);
             } else {
-                viewHolder = (ViewHolder) v.getTag();
+                groupViewHolder = (GroupViewHolder) v.getTag();
             }
 
-            // 그룹을 펼칠때와 닫을때 아이콘을 변경해 준다.
-            if (isExpanded) {
-                viewHolder.iv_image.setBackgroundColor(Color.GREEN);
-            } else {
-                viewHolder.iv_image.setBackgroundColor(Color.WHITE);
-            }
-
-            viewHolder.tv_groupName.setText(getGroup(groupPosition));
+            groupViewHolder.groupExpandIcon.setEnabled(isExpanded);
+            groupViewHolder.groupName.setText(getGroup(groupPosition));
 
             return v;
         }
@@ -260,15 +266,24 @@ public class TravelScheduleActivity extends Activity {
             View v = convertView;
 
             if (v == null) {
-                viewHolder = new ViewHolder();
-                v = inflater.inflate(R.layout.travel_schedule_list_row, null);
-                viewHolder.tv_childName = (TextView) v.findViewById(R.id.tv_child);
-                v.setTag(viewHolder);
+                childViewHolder = new ChildViewHolder();
+                v = inflater.inflate(R.layout.travel_schedule_list_row_child, null);
+//                childViewHolder.layout_child = (RelativeLayout) v.findViewById(R.id.layout_child);
+                childViewHolder.child_category_icon = (ImageView) v.findViewById(R.id.child_category_icon);
+                childViewHolder.child_title = (TextView) v.findViewById(R.id.child_title);
+                childViewHolder.child_date = (TextView) v.findViewById(R.id.child_date);
+                v.setTag(childViewHolder);
             } else {
-                viewHolder = (ViewHolder) v.getTag();
+                childViewHolder = (ChildViewHolder) v.getTag();
             }
 
-            viewHolder.tv_childName.setText(getChild(groupPosition, childPosition).getType());
+            TravelItem travelItem = getChild(groupPosition, childPosition);
+
+            childViewHolder.child_title.setText(travelItem.getTitle());
+            String pattern = getApplicationContext().getResources().getString(R.string.travel_schedule_child_time_pattern);
+            String startHhmm = DateTimeUtils.convertFormattedTimeFromSystemTime(pattern, Long.parseLong(travelItem.getStartDate()));
+            String endHhmm = DateTimeUtils.convertFormattedTimeFromSystemTime(pattern, Long.parseLong(travelItem.getEndDate()));
+            childViewHolder.child_date.setText(startHhmm + "~" + endHhmm);
 
             return v;
         }
@@ -283,10 +298,16 @@ public class TravelScheduleActivity extends Activity {
             return true;
         }
 
-        class ViewHolder {
-            public ImageView iv_image;
-            public TextView tv_groupName;
-            public TextView tv_childName;
+        class GroupViewHolder {
+            public TextView groupName;
+            public ImageView groupExpandIcon;
+        }
+
+        class ChildViewHolder {
+//            public RelativeLayout layout_child;
+            public ImageView child_category_icon;
+            public TextView child_title;
+            public TextView child_date;
         }
     }
 }

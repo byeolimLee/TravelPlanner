@@ -1,6 +1,9 @@
 package com.starim.android.apps.travelplanner.model;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.starim.android.apps.travelplanner.TravelItemCategory;
+
+import java.io.Serializable;
 
 /**
  * Created by starim on 14. 7. 3..
@@ -77,6 +80,7 @@ public abstract class TravelItem {
             return false;
         if (endDate.equals(((TravelItem) other).endDate) == false)
             return false;
-        return false;
+        return true;
     }
+
 }

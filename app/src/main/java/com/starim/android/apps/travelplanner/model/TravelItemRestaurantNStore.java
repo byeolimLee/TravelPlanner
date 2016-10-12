@@ -4,28 +4,26 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.starim.android.apps.travelplanner.TravelItemCategory;
 
-import java.util.AbstractCollection;
-
 /**
  * Created by starim on 14. 7. 2..
  */
 @DatabaseTable
-public class TravelItemTransport extends TravelItem {
+public class TravelItemRestaurantNStore extends TravelItem {
 
     @DatabaseField
     private String name;
 
     @DatabaseField
-    private String departureCity;
+    private String stuff;
 
     @DatabaseField
-    private String arrivalCity;
+    private String price;
 
     @DatabaseField
-    private String note;
+    private String howToFind;
 
     @DatabaseField
-    private int duration;
+    private String notes;
 
     public String getName() {
         return name;
@@ -35,36 +33,36 @@ public class TravelItemTransport extends TravelItem {
         this.name = name;
     }
 
-    public String getArrivalCity() {
-        return arrivalCity;
+    public String getStuff() {
+        return stuff;
     }
 
-    public void setArrivalCity(String arrivalCity) {
-        this.arrivalCity = arrivalCity;
+    public void setStuff(String stuff) {
+        this.stuff = stuff;
     }
 
-    public String getDepartureCity() {
-        return departureCity;
+    public String getPrice() {
+        return price;
     }
 
-    public void setDepartureCity(String departureCity) {
-        this.departureCity = departureCity;
+    public void setPrice(String price) {
+        this.price = price;
     }
 
-    public int getDuration() {
-        return duration;
+    public String getHowToFind() {
+        return howToFind;
     }
 
-    public void setDuration(int duration) {
-        this.duration = duration;
+    public void setHowToFind(String howToFind) {
+        this.howToFind = howToFind;
     }
 
-    public String getNote() {
-        return note;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public void setupItemDefault(TravelList list, String type, String title, String startDate, String endDate) {
@@ -75,21 +73,20 @@ public class TravelItemTransport extends TravelItem {
         this.setEndDate(endDate);
     }
 
-    public void setupItemSpecific(String name, String depCity, String arrCity, String note) {
+    public void setupItemSpecific(String name, String stuff, String price, String howToFind, String notes) {
         this.setName(name);
-        this.setDepartureCity(depCity);
-        this.setArrivalCity(arrCity);
-        int duration = (int)(Long.parseLong(this.getEndDate()) - Long.parseLong(this.getStartDate()));
-        this.setDuration(duration);
-        this.setNote(note);
+        this.setStuff(stuff);
+        this.setPrice(price);
+        this.setHowToFind(howToFind);
+        this.setNotes(notes);
     }
 
-    public TravelItemTransport(TravelList list, String title, String startDate, String endDate, String name, String depCity, String arrCity, String note) {
-        setupItemDefault(list, TravelItemCategory.TYPE_STRING_TRANSPORTS, title, startDate, endDate);
-        setupItemSpecific(name, depCity, arrCity, note);
+    public TravelItemRestaurantNStore(TravelList list, String title, String startDate, String endDate, String name, String stuff, String price, String howToFind, String notes) {
+        setupItemDefault(list, TravelItemCategory.TYPE_STRING_RESTUARANTSNSTORES, title, startDate, endDate);
+        setupItemSpecific(name, stuff, price, howToFind, notes);
     }
 
-    public TravelItemTransport() {}
+    public TravelItemRestaurantNStore() {}
 
     @Override
     public void setList(TravelList travelList) {this.list = travelList; }
@@ -119,7 +116,7 @@ public class TravelItemTransport extends TravelItem {
         if (super.equals(other) == false)
             return false;
 
-        if (name.equals(((TravelItemTransport) other).name) == false)
+        if (name.equals(((TravelItemRestaurantNStore) other).name) == false)
             return false;
         return true;
     }
